@@ -5,5 +5,5 @@ import Login from "./login";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return <Login></Login>;
+  return <Login onLogin={undefined}></Login>;
 }
