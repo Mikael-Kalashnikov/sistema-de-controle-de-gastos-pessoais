@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import logo from "../Images/logo.png";
+import { TransactionModal } from "@/components/TransactionModal";
 
 function Home() {
   const transactions = [
@@ -32,7 +33,8 @@ function Home() {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-4 bg-gray-600 text-white">
+      <TransactionModal isOpen={false} />
+      <div className="flex justify-between items-center p-4 bg-gray-600 text-white relative">
         <div className="flex items-center">
           <img src={logo.src} alt="Logo" className="w-20 h-16 mr-2" />
           <h1 className="text-lg font-semibold">Gerenciamento de Gastos</h1>
