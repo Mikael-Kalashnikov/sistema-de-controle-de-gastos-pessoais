@@ -2,6 +2,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import logo from "../Images/logo.png";
 import { TransactionModal } from "@/components/TransactionModal";
+import Image from "next/image";
+import deleteIcon from "../../assets/Delete.svg";
+import editIcon from "../../assets/edit.svg";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -144,10 +147,22 @@ function Home() {
                   <td className="p-2 text-center">{transaction.type}</td>
                   <td className="p-2 text-center">{transaction.date}</td>
                   <td className="p-2 text-center">
-                    <Link href={""}>Editar</Link>
+                    <button>
+                      <Image
+                        className="filter brightness-0 invert"
+                        src={editIcon}
+                        alt="edit"
+                      />
+                    </button>
                   </td>
                   <td className="p-2 text-center">
-                    <button>Deletar</button>
+                    <button>
+                      <Image
+                        className="filter brightness-0 invert"
+                        src={deleteIcon}
+                        alt="delete"
+                      />
+                    </button>
                   </td>
                 </tr>
               ))}
