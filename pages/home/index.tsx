@@ -1,61 +1,53 @@
-import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../Images/logo.png";
 import { TransactionModal } from "@/components/TransactionModal";
 import Image from "next/image";
 import deleteIcon from "../../assets/Delete.svg";
 import editIcon from "../../assets/edit.svg";
+import { title } from "process";
 
 function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const transactions = [
     {
       id: 1,
       name: "Salário",
-      amount: 1312,
+      value: 1312,
       type: "Receita",
       date: "2023-08-15",
     },
     {
       id: 2,
       name: "Alimentação",
-      amount: -50,
+      value: -50,
       type: "Despesa",
       date: "2023-08-10",
     },
     {
       id: 3,
       name: "Condomínio",
-      amount: -449.9,
+      value: -449.9,
       type: "Despesa",
       date: "2023-08-15",
     },
     {
       id: 4,
       name: "Internet",
-      amount: -129.9,
+      value: -129.9,
       type: "Despesa",
       date: "2023-08-15",
     },
     {
       id: 5,
       name: "Jogo do bicho",
-      amount: 400,
+      value: 400,
       type: "Lucros ilegais",
       date: "2023-08-15",
     },
     {
       id: 6,
       name: "Blazer",
-      amount: -500,
+      value: -500,
       type: "Lazer",
-      date: "2023-08-15",
-    },
-    {
-      id: 7,
-      name: "Água + Luz",
-      amount: -300,
-      type: "Essencial",
       date: "2023-08-15",
     },
   ];
@@ -71,11 +63,11 @@ function Home() {
   };
 
   const totalEntradas = transactions.reduce((total, transaction) => {
-    return transaction.amount > 0 ? total + transaction.amount : total;
+    return transaction.value > 0 ? total + transaction.value : total;
   }, 0);
 
   const totalSaidas = transactions.reduce((total, transaction) => {
-    return transaction.amount < 0 ? total - transaction.amount : total;
+    return transaction.value < 0 ? total - transaction.value : total;
   }, 0);
 
   const total = totalEntradas - totalSaidas;
@@ -93,7 +85,11 @@ function Home() {
         >
           Nova Transação
         </button>
-        <TransactionModal isOpen={modalAberto} onClose={fecharModal} />
+        <TransactionModal
+          isOpen={modalAberto}
+          title="Nova transação"
+          onClose={fecharModal}
+        />
       </div>
       <div className="flex justify-around text-center text-2xl p-12">
         <div className="w-2/12 bg-green-500 p-4 rounded-lg">
@@ -127,8 +123,8 @@ function Home() {
                 <th className="px-20 py-2 text-center">Valor</th>
                 <th className="px-20 py-2 text-center">Categoria</th>
                 <th className="px-20 py-2 text-center">Data</th>
-                <th className="px-20 py-2">Editar</th>
-                <th className="px-20 py-2">Deletar</th>
+                <th className="px-20 py-2 text-center">Editar</th>
+                <th className="px-20 py-2 text-center">Deletar</th>
               </tr>
             </thead>
             <tbody>
@@ -137,17 +133,17 @@ function Home() {
                   <td className="p-2 text-center">{transaction.name}</td>
                   <td
                     className={`p-2 text-center ${
-                      transaction.amount > 0 ? "text-green-600" : "text-red-600"
+                      transaction.value > 0 ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {transaction.amount >= 0
-                      ? `$${transaction.amount}`
-                      : `- $${-transaction.amount}`}
+                    {transaction.value >= 0
+                      ? `$${transaction.value}`
+                      : `- $${-transaction.value}`}
                   </td>
                   <td className="p-2 text-center">{transaction.type}</td>
                   <td className="p-2 text-center">{transaction.date}</td>
                   <td className="p-2 text-center">
-                    <button>
+                    <button onClick={abrirModal}>
                       <Image
                         className="filter brightness-0 invert"
                         src={editIcon}

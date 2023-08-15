@@ -1,6 +1,7 @@
 import Image from "next/image";
 import exitIcon from "../../assets/exit.svg";
 import { useState } from "react";
+import { title } from "process";
 
 type TransactionModalProps = {
   isOpen: boolean;
@@ -8,6 +9,7 @@ type TransactionModalProps = {
 
 type PropsModalTransacao = {
   isOpen: boolean;
+  title: string;
   onClose: () => void;
 };
 
@@ -20,8 +22,8 @@ export function TransactionModal({ isOpen, onClose }: PropsModalTransacao) {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/70">
       <main className="w-[480px] bg-gray-600 p-8 rounded-lg">
-        <div className="pb-8 flex items-center justify-between">
-          <h2 className="text-3xl">Nova Transação</h2>
+        <div className="pb-8 px-4 flex items-center justify-between">
+          <h2 className="text-3xl">{title}</h2>
           <button onClick={onClose}>
             <Image src={exitIcon} alt="Sair do modal" />
           </button>
