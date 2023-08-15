@@ -1,17 +1,33 @@
-import firebase from "firebase/app";
-import fbAuth from "firebase/auth";
-import fbRestore from "firebase/firestore";
-import fbStorage from "firebase/storage";
+import { collection, getDocs } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-  appId: "SEU_APP_ID",
-};
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyCy8h1VrIpOvbM-_ZCrTmLBGcsn2MJc9Hw",
+  authDomain: "sistema-de-gastos-pessoais.firebaseapp.com",
+  projectId: "sistema-de-gastos-pessoais",
+});
 
-export { fbAuth, fbRestore, fbStorage };
-export default firebase;
+export const App = () =>{
+  const [name, setName] = useState("");
+  const [value, setValue] = useState("");
+  const [type, setType] = useState("");
+  const [date, setDate] = useState("");
+  const [transacao, setTransacao] = useState([]);
+
+  const db = getFirestore(firebaseApp);
+  const userCollectionRef = collection(db, "Transações");
+
+  useEffect(() => {
+    const getTransacao = async () =>{
+      const data = await getDocs(userCollectionRef);
+      console.log(data.docs.map((doc)=> ({...doc.data(), id:doc.id})));
+    };
+    getTransacao();
+  }, []);
+}
+//firebase.initializeApp(firebaseApp);
+
+//export { fbAuth, fbRestore, fbStorage };
+//export default firebase;

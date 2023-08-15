@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import logo from "../Images/logo.png";
+import { TransactionModal } from "@/components/TransactionModal";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,6 +57,16 @@ function Home() {
     },
   ];
 
+  const [modalAberto, setModalAberto] = useState(false);
+
+  const abrirModal = () => {
+    setModalAberto(true);
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false);
+  };
+
   const totalEntradas = transactions.reduce((total, transaction) => {
     return transaction.amount > 0 ? total + transaction.amount : total;
   }, 0);
@@ -75,10 +86,11 @@ function Home() {
         </div>
         <button
           className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600"
-          //onClick={() => setIsModalOpen(true)}
+          onClick={abrirModal}
         >
           Nova Transação
         </button>
+        <TransactionModal isOpen={modalAberto} onClose={fecharModal} />
       </div>
       <div className="flex justify-around text-center text-2xl p-12">
         <div className="w-2/12 bg-green-500 p-4 rounded-lg">
@@ -103,17 +115,17 @@ function Home() {
       <div className="flex justify-center">
         <div className="p-4">
           <h1 className="font-semibold mb-8 text-3xl text-center">
-            Resumo de Entradas/Saídas
+            Histórico de transações
           </h1>
           <table className="w-full border-collapse">
             <thead>
               <tr className="text-2xl border-b-2">
-                <th className="px-24 py-2 text-center">Nome</th>
-                <th className="px-24 py-2 text-center">Valor</th>
-                <th className="px-24 py-2 text-center">Tipo</th>
-                <th className="px-24 py-2 text-center">Data</th>
-                <th className="px-24 py-2">Editar</th>
-                <th className="px-24 py-2">Deletar</th>
+                <th className="px-20 py-2 text-center">Transações</th>
+                <th className="px-20 py-2 text-center">Valor</th>
+                <th className="px-20 py-2 text-center">Categoria</th>
+                <th className="px-20 py-2 text-center">Data</th>
+                <th className="px-20 py-2">Editar</th>
+                <th className="px-20 py-2">Deletar</th>
               </tr>
             </thead>
             <tbody>
