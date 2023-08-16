@@ -1,13 +1,24 @@
+"use client";
 import React, { useState } from "react";
 import logo from "../Images/logo.png";
+import { useRouter } from "next/router";
+import signIn from "@/services/fb-singin";
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLogin({ username, password });
+    const { result, error } = await signIn(username, password);
+    if (error) {
+      alert("Credenciais erradas!");
+      return console.log(error);
+    }
+    // else successful
+    console.log(result);
+    return router.push("/home");
   };
 
   return (
