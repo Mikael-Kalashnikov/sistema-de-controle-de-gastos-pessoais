@@ -8,6 +8,8 @@ export default async function signIn(email: string, password: string) {
     error = null;
   try {
     result = await signInWithEmailAndPassword(auth, email, password);
+    localStorage.setItem("user_id", JSON.stringify(result.user.uid));
+    // console.log(result);
   } catch (e) {
     error = e;
   }

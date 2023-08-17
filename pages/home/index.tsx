@@ -6,51 +6,65 @@ import deleteIcon from "../../assets/Delete.svg";
 import editIcon from "../../assets/edit.svg";
 import { title } from "process";
 
+import getData from "@/services/fb-get-data";
+
 function Home() {
-  const transactions = [
-    {
-      id: 1,
-      name: "Salário",
-      value: 1312,
-      type: "Receita",
-      date: "2023-08-15",
-    },
-    {
-      id: 2,
-      name: "Alimentação",
-      value: -50,
-      type: "Despesa",
-      date: "2023-08-10",
-    },
-    {
-      id: 3,
-      name: "Condomínio",
-      value: -449.9,
-      type: "Despesa",
-      date: "2023-08-15",
-    },
-    {
-      id: 4,
-      name: "Internet",
-      value: -129.9,
-      type: "Despesa",
-      date: "2023-08-15",
-    },
-    {
-      id: 5,
-      name: "Jogo do bicho",
-      value: 400,
-      type: "Lucros ilegais",
-      date: "2023-08-15",
-    },
-    {
-      id: 6,
-      name: "Blazer",
-      value: -500,
-      type: "Lazer",
-      date: "2023-08-15",
-    },
-  ];
+  const [transactions, setTrasanctions] = useState([]);
+  // const transactions = [
+  //   {
+  //     id: 1,
+  //     name: "Salário",
+  //     value: 1312,
+  //     type: "Receita",
+  //     date: "2023-08-15",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Alimentação",
+  //     value: -50,
+  //     type: "Despesa",
+  //     date: "2023-08-10",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Condomínio",
+  //     value: -449.9,
+  //     type: "Despesa",
+  //     date: "2023-08-15",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Internet",
+  //     value: -129.9,
+  //     type: "Despesa",
+  //     date: "2023-08-15",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Jogo do bicho",
+  //     value: 400,
+  //     type: "Lucros ilegais",
+  //     date: "2023-08-15",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Blazer",
+  //     value: -500,
+  //     type: "Lazer",
+  //     date: "2023-08-15",
+  //   },
+  // ];
+
+  const loadData = async () => {
+    const userId = localStorage.getItem("user_id");
+    const result = await getData("Transações", userId);
+    result.result?.data();
+    console.log();
+  };
+
+  useEffect(() => {
+    loadData();
+  });
 
   const [modalAberto, setModalAberto] = useState(false);
 
