@@ -5,52 +5,20 @@ import Image from "next/image";
 import deleteIcon from "../../assets/Delete.svg";
 import editIcon from "../../assets/edit.svg";
 import { title } from "process";
+import { api } from "@/services/api";
+import { AxiosResponse } from "axios";
+
+type TransactionsType = {
+  _id: string;
+  name: string;
+  cost: number;
+  category: string;
+  date: string;
+};
 
 function Home() {
-  const transactions = [
-    {
-      id: 1,
-      name: "Salário",
-      value: 1312,
-      type: "Receita",
-      date: "2023-08-15",
-    },
-    {
-      id: 2,
-      name: "Alimentação",
-      value: -50,
-      type: "Despesa",
-      date: "2023-08-10",
-    },
-    {
-      id: 3,
-      name: "Condomínio",
-      value: -449.9,
-      type: "Despesa",
-      date: "2023-08-15",
-    },
-    {
-      id: 4,
-      name: "Internet",
-      value: -129.9,
-      type: "Despesa",
-      date: "2023-08-15",
-    },
-    {
-      id: 5,
-      name: "Jogo do bicho",
-      value: 400,
-      type: "Lucros ilegais",
-      date: "2023-08-15",
-    },
-    {
-      id: 6,
-      name: "Blazer",
-      value: -500,
-      type: "Lazer",
-      date: "2023-08-15",
-    },
-  ];
+  const [transactions, setTransactions] = useState<TransactionsType[]>([]);
+  const [categories, setCategories] = useState([]);
 
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -62,12 +30,33 @@ function Home() {
     setModalAberto(false);
   };
 
+  const loadData = async () => {
+    try {
+      const loadExpenses = await api.get("/expense");
+      setTransactions(loadExpenses.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteTransaction = async (id: string) => {
+    try {
+      await api.delete(`/expense/${id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const totalEntradas = transactions.reduce((total, transaction) => {
-    return transaction.value > 0 ? total + transaction.value : total;
+    return transaction.cost > 0 ? total + transaction.cost : total;
   }, 0);
 
   const totalSaidas = transactions.reduce((total, transaction) => {
-    return transaction.value < 0 ? total - transaction.value : total;
+    return transaction.cost < 0 ? total - transaction.cost : total;
   }, 0);
 
   const total = totalEntradas - totalSaidas;
@@ -129,18 +118,18 @@ function Home() {
             </thead>
             <tbody>
               {transactions.map((transaction) => (
-                <tr key={transaction.id} className="border-b">
+                <tr key={transaction._id} className="border-b">
                   <td className="p-2 text-center">{transaction.name}</td>
                   <td
                     className={`p-2 text-center ${
-                      transaction.value > 0 ? "text-green-600" : "text-red-600"
+                      transaction.cost > 0 ? "text-green-600" : "text-red-600"
                     }`}
                   >
-                    {transaction.value >= 0
-                      ? `$${transaction.value}`
-                      : `- $${-transaction.value}`}
+                    {transaction.cost >= 0
+                      ? `$${transaction.cost}`
+                      : `- $${-transaction.cost}`}
                   </td>
-                  <td className="p-2 text-center">{transaction.type}</td>
+                  <td className="p-2 text-center">{transaction.category}</td>
                   <td className="p-2 text-center">{transaction.date}</td>
                   <td className="p-2 text-center">
                     <button onClick={abrirModal}>
@@ -152,7 +141,7 @@ function Home() {
                     </button>
                   </td>
                   <td className="p-2 text-center">
-                    <button>
+                    <button onClick={() => deleteTransaction(transaction._id)}>
                       <Image
                         className="filter brightness-0 invert"
                         src={deleteIcon}

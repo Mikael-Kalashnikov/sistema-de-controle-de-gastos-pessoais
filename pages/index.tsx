@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import Login from "./login";
+import HomePage from "./home";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return <Login onLogin={undefined}></Login>;
+  return <HomePage />;
 }
