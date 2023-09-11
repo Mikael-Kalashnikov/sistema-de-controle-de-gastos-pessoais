@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import exitIcon from "../../assets/exit.svg";
-import { useState } from "react";
+import exitIcon from "@/assets/exit.svg";
 import { api } from "@/services/api";
 
 type TransactionModalProps = {
@@ -10,12 +10,20 @@ type TransactionModalProps = {
 type PropsModalTransacao = {
   isOpen: boolean;
   title: string;
+  data: {
+    _id: string;
+    name: string;
+    cost: number;
+    category: string;
+    date: string;
+  };
   onClose: () => void;
 };
 
-export function TransactionModal({
+export function UpdateTransactionModal({
   isOpen,
   title,
+  data,
   onClose,
 }: PropsModalTransacao) {
   if (!isOpen) return null;
@@ -24,15 +32,26 @@ export function TransactionModal({
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
 
-  const handleCreateTransaction = async () => {
+  const loadData = () => {
+    setDescription(data.name);
+    setPrice(String(data.cost));
+    setCategory(data.category);
+    setDate(data.date);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleUpdateTransaction = async () => {
     try {
       const expense = {
         name: description,
-        cost: Number(price),
+        cost: price,
         category,
         date,
       };
-      await api.post("/expense", expense);
+      await api.put(`/expense/${data._id}`, expense);
       onClose();
     } catch (err) {
       console.log(err);
@@ -86,7 +105,7 @@ export function TransactionModal({
         </div> */}
         <div className="flex justify-center mt-4">
           <button
-            onClick={handleCreateTransaction}
+            onClick={handleUpdateTransaction}
             className="w-2/5 bg-blue-500 py-4 text-lg hover:bg-slate-400 rounded-lg"
           >
             Cadastrar

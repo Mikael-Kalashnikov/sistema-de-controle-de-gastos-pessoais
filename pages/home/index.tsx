@@ -7,6 +7,7 @@ import editIcon from "../../assets/edit.svg";
 import { title } from "process";
 import { api } from "@/services/api";
 import { AxiosResponse } from "axios";
+import { UpdateTransactionModal } from "@/components/UpdateTransactionModal";
 
 type TransactionsType = {
   _id: string;
@@ -19,8 +20,10 @@ type TransactionsType = {
 function Home() {
   const [transactions, setTransactions] = useState<TransactionsType[]>([]);
   const [categories, setCategories] = useState([]);
+  const [dataToUpdate, setDataToUpdate] = useState({} as TransactionsType);
 
   const [modalAberto, setModalAberto] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const abrirModal = () => {
     setModalAberto(true);
@@ -28,6 +31,15 @@ function Home() {
 
   const fecharModal = () => {
     setModalAberto(false);
+  };
+
+  const handleOpenUpdateModal = (data: any) => {
+    setDataToUpdate(data);
+    setIsUpdateModalOpen(true);
+  };
+  const handleCloseUpdateModal = () => {
+    setDataToUpdate({} as TransactionsType);
+    setIsUpdateModalOpen(false);
   };
 
   const loadData = async () => {
@@ -78,6 +90,12 @@ function Home() {
           isOpen={modalAberto}
           title="Nova transação"
           onClose={fecharModal}
+        />
+        <UpdateTransactionModal
+          isOpen={isUpdateModalOpen}
+          title="Atualize a transação"
+          data={dataToUpdate}
+          onClose={handleCloseUpdateModal}
         />
       </div>
       <div className="flex justify-around text-center text-2xl p-12">
@@ -132,7 +150,7 @@ function Home() {
                   <td className="p-2 text-center">{transaction.category}</td>
                   <td className="p-2 text-center">{transaction.date}</td>
                   <td className="p-2 text-center">
-                    <button onClick={abrirModal}>
+                    <button onClick={() => handleOpenUpdateModal(transaction)}>
                       <Image
                         className="filter brightness-0 invert"
                         src={editIcon}
