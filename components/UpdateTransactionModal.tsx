@@ -47,7 +47,7 @@ export function UpdateTransactionModal({
     try {
       const expense = {
         name: description,
-        cost: price,
+        cost: Number(price),
         category,
         date,
       };
